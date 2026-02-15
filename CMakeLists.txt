@@ -6,7 +6,7 @@ cmake_minimum_required( VERSION 4.0.0 FATAL_ERROR )
 # Настройки проекта
 project(
     "sormant"
-    VERSION         0.0.0.0
+    VERSION         0.0.0.1
     DESCRIPTION     "RTP traffic redirection"
     LANGUAGES       C
 )
@@ -25,6 +25,12 @@ else()
     message(FATAL_ERROR "Компилятор Clang не найден!")
 endif()
 
+# Требуем pkgconfig
+find_package(PkgConfig REQUIRED)
+
+# Ищем библиотеки
+pkg_check_modules(BPF REQUIRED  "libbpf")
+
 # Настраивам параметры сборки
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -32,13 +38,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Генерируем заголовочные файлы
 
 # Заголовочные файлы проекта
-include_directories("include")
 
 # Исполняемые файлы и библиотеки
 add_subdirectory("src")
 
 # Тесты
-
 
 # Документация
 
