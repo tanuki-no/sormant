@@ -53,3 +53,11 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+# Build
+build
+
+# VSCode
+.vscode
+.cache
+compile_commands.json
