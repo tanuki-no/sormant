@@ -10,7 +10,7 @@ static __u64 time_get_ns(void)
         struct timespec ts;
 
         clock_gettime(CLOCK_MONOTONIC, &ts);
-        return ts.tv_sec * 1000000000ull + ts.tv_nsec;
+        return (__u64) ts.tv_sec * 1000000000ull + (__u64) ts.tv_nsec;
 }
 
 static __u64 start_time;
@@ -46,7 +46,8 @@ int main(int argc, char **argv)
         struct bpf_program *prog;
         struct perf_buffer *pb;
         struct bpf_object *obj;
-        int map_fd, ret = 0;
+        int map_fd;
+        long ret = 0;
         char filename[256];
         FILE *f;
 
@@ -85,7 +86,7 @@ int main(int argc, char **argv)
         pb = perf_buffer__new(map_fd, 8, print_bpf_output, NULL, NULL, NULL);
         ret = libbpf_get_error(pb);
         if (ret) {
-                printf("failed to setup perf_buffer: %d\n", ret);
+                printf("failed to setup perf_buffer: %ld\n", ret);
                 return 1;
         }
 
@@ -100,7 +101,7 @@ int main(int argc, char **argv)
 cleanup:
         bpf_link__destroy(link);
         bpf_object__close(obj);
-        return ret;
+        return (int) ret;
 }
 
 /* КФ */

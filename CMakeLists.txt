@@ -11,29 +11,16 @@ project(
     LANGUAGES       C
 )
 
-# Разрешаем только CLang версии не ниже 20.x
-string( TOLOWER "${CMAKE_C_COMPILER_ID}" COMPILER_ID )
-if (COMPILER_ID MATCHES "clang")
-    execute_process(
-        COMMAND ${CMAKE_C_COMPILER} --version OUTPUT_VARIABLE clang_full_version_string
-    )
-    string (
-        REGEX REPLACE ".*clang version ([0-9]+\\.[0-9]+).*" "\\1"
-        CLANG_VERSION_STRING ${clang_full_version_string})
-    message("Clang версии ${CLANG_VERSION_STRING} найден!")
-else()
-    message(FATAL_ERROR "Компилятор Clang не найден!")
-endif()
+# Настройки сборки вынесена в отдельные файлы
+include( "cmake/detect.cmake" )
+include( "cmake/options.cmake" )
+include( "cmake/settings.cmake" )
 
 # Требуем pkgconfig
 find_package(PkgConfig REQUIRED)
 
 # Ищем библиотеки
 pkg_check_modules(BPF REQUIRED  "libbpf")
-
-# Настраивам параметры сборки
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Генерируем заголовочные файлы
 
