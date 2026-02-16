@@ -1,6 +1,5 @@
-# Исполняемые файли и библиотеки
+# Исполняемые файли и библиотеки в пространстве пользователя
 
-# Userspace
 add_executable(
     ${PROJECT_NAME}
     "main.c"
@@ -14,6 +13,4 @@ target_link_libraries(
     ${PROJECT_NAME} PRIVATE ${BPF_LIBRARIES}
 )
 
-# Модуль ядра
-
-# КФ
+# Конец файла

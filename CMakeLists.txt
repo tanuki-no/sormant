@@ -39,6 +39,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Заголовочные файлы проекта
 
+# Модули ядра
+add_subdirectory("bpf")
+
 # Исполняемые файлы и библиотеки
 add_subdirectory("src")
 
