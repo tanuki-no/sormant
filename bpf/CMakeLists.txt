@@ -8,6 +8,6 @@
 
 set ( BPF_NAME  "xdp" )
 
-
+add_library("${BPF_NAME}" OBJECT "${BPF_NAME}.c")
 
 # Конец файла

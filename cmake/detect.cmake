@@ -14,8 +14,8 @@ else()
     message(FATAL_ERROR "Компилятор Clang не найден!")
 endif()
 
-# 
-message( STATUS "Флаги компилятора:" )
+# Задать базовые параметры сборки для пользовательской части
+message( STATUS "Общие флаги компилятора для :" )
 include( CheckCompilerFlag )
 
 set ( SORMANT_COMMON_CFLAGS  "" )
@@ -23,20 +23,25 @@ set ( CHECK_C_FLAGS "-Wall;-pedantic;-Wconversion;-Wunused;-Wshadow;-Werror;-Wno
 set ( CMAKE_REQUIRED_QUIET  TRUE )
 foreach (FLAG ${CHECK_C_FLAGS} )
   check_compiler_flag(C ${FLAG} HAVE_${FLAG})
-      if(HAVE_${FLAG})
-         set (SORMANT_COMMON_CFLAGS  "${SORMANT_COMMON_CFLAGS} ${FLAG}")
-     endif()
+    if(HAVE_${FLAG})
+        set (SORMANT_COMMON_CFLAGS  "${SORMANT_COMMON_CFLAGS} ${FLAG}")
+    endif()
 endforeach()
 message(STATUS "Общие флаги компилятора: ${SORMANT_COMMON_CFLAGS}")
 
-# Проверяем, что поддерживается компилятором и компоновщиком
-message(CHECK_START "Компоновщик поддерживает PIE?")
-include(CheckPIESupported)
-check_pie_supported(OUTPUT_VARIABLE output LANGUAGES C )
-if (CMAKE_C_LINK_PIE_SUPPORTED)
-    message( CHECK_PASS "Да!")
-else()
-    message( CHECK_FAIL "Нет. ${output}")
-endif()
+# Задать
+set ( SORMANT_EBPF_CFLAGS   "" )
+
+# CLANG_FLAGS := ${FLAGS} --target=bpf -std=gnu99 -nostdinc
+# # eBPF verifier enforces unaligned access checks where necessary, so don't
+# # let clang complain too early.
+# CLANG_FLAGS += -ftrap-function=__undefined_trap
+# CLANG_FLAGS += -Wall -Wextra -Werror -Wshadow
+# CLANG_FLAGS += -Wno-address-of-packed-member
+# CLANG_FLAGS += -Wno-unknown-warning-option
+# CLANG_FLAGS += -Wno-gnu-variable-sized-type-not-at-end
+# CLANG_FLAGS += -Wimplicit-int-conversion -Wenum-conversion
+# CLANG_FLAGS += -Wimplicit-fallthrough
+# CLANG_FLAGS += -mcpu=v3
 
 # Конец файла
