@@ -2,22 +2,23 @@
   Using eBPF for RTP traffic redirection
  */
 
-#include "vmlinux.h"
+#include <stdint.h>
+#include <linux/bpf.h>
 #include <bpf/bpf_helpers.h>
 #include <linux/version.h>
 
 struct {
   __uint(type, BPF_MAP_TYPE_PERF_EVENT_ARRAY);
   __uint(key_size, sizeof(int));
-  __uint(value_size, sizeof(u32));
+  __uint(value_size, sizeof(__u32));
   __uint(max_entries, 2);
 } my_map SEC(".maps");
 
 SEC("ksyscall/write")
 int bpf_prog1(struct pt_regs *ctx) {
   struct S {
-    u64 pid;
-    u64 cookie;
+    __u64 pid;
+    __u64 cookie;
   } data;
 
   data.pid = bpf_get_current_pid_tgid();
@@ -29,6 +30,6 @@ int bpf_prog1(struct pt_regs *ctx) {
 }
 
 char _license[] SEC("license") = "GPL";
-u32 _version SEC("version") = LINUX_VERSION_CODE;
+__u32 _version SEC("version") = LINUX_VERSION_CODE;
 
 /* КФ */
